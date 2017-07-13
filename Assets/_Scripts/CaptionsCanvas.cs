@@ -62,7 +62,7 @@ public class CaptionsCanvas : MonoBehaviour {
 		ccBottomImage.enabled = true;
 		float resetAlpha = 0f;
 		ccBottomImage.color = new Color (0f, 0f, 0f, resetAlpha);
-		for (float t = 0.0f; t < activeAlpha; t += Time.deltaTime / canvasFadeDuration / 10f) {
+        for (float t = 0.0f; t < activeAlpha; t += Time.deltaTime / canvasFadeDuration / 10f) {
 			ccBottomImage.color = new Color (0f, 0f, 0f, Mathf.Lerp (ccBottomImage.color.a, activeAlpha, t));
 			yield return null;
 		}

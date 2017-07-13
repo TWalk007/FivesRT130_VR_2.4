@@ -32,7 +32,7 @@ public class ExploreController : MonoBehaviour {
 	public GameObject cuttingTableGObject;
 	public GameObject operatorHotspot;
 	public GameObject particleGlowTable;
-    public GameObject camera;
+    public GameObject cam;
 
 	public Transform operatorSequenceCamPos;
 	public Transform spindleSequenceCamPos;
@@ -62,7 +62,7 @@ public class ExploreController : MonoBehaviour {
 	private Vector3 operatorCamStartRotation = new Vector3 (10f, -140f, 0f);
 
 	private bool stateLock = false;
-	private bool frontDoorsOpen;
+    private bool frontDoorsOpen = false;
 	private bool sideDoorOpened = false;
 
 	#endregion
@@ -77,7 +77,6 @@ public class ExploreController : MonoBehaviour {
 		if (!stateLock) {
 			if (myState == States.wait) {
 				states_wait ();
-                //Debug.Log("States.wait now active.");
 			} else if (myState == States.frontLoading && !hasFrontLoadingPlayed) {
 				states_frontLoading ();
 				GvrReticleOff ();
@@ -131,7 +130,7 @@ public class ExploreController : MonoBehaviour {
 	private void states_spindleMovement(){
 		arrayInt = 2;
 		stateLock = true;
-		CameraSpindleLock ();
+		//CameraSpindleLock ();
 
 		spindleCamStartPos = cameraController.transform.position;
 		movieCanvasController.InitializeCanvas ();
@@ -156,9 +155,9 @@ public class ExploreController : MonoBehaviour {
 		arrayInt = 4;
 		stateLock = true;
 
-        InputTracking.disablePositionalTracking = true;
-        cameraController.GetComponent<NegateTracking>().operatorScene = true;
-        cameraController.GetComponent<NegateTracking>().enabled = true;
+        //InputTracking.disablePositionalTracking = true;
+        //cameraController.GetComponent<NegateTracking>().operatorScene = true;
+        //cameraController.GetComponent<NegateTracking>().enabled = true;
 
         operatorCamStartPos = cameraController.transform.position;
 		OperatorMoveIn ();
@@ -167,7 +166,7 @@ public class ExploreController : MonoBehaviour {
 		OperatorDoorTrigger ();
 		sideDoorOpened = true;
 
-		CameraLock (operatorCamStartRotation);
+		//CameraLock (operatorCamStartRotation);
 		captionsCanvas.FadeCaptionsPanelToggle (arrayInt + 2);
 		StartCoroutine (OperatorAnimationDelay ());
 	}
@@ -207,10 +206,10 @@ public class ExploreController : MonoBehaviour {
 	}
 
 	private void CameraLock (Vector3 targetRotation){
-        InputTracking.disablePositionalTracking = true;
-        cameraController.GetComponent<NegateTracking>().enabled = true;
-        startRotation = targetRotation;
-		cameraController.transform.eulerAngles = targetRotation;
+        //InputTracking.disablePositionalTracking = true;
+        //cameraController.GetComponent<NegateTracking>().enabled = true;
+  //      startRotation = targetRotation;
+		//cameraController.transform.eulerAngles = targetRotation;
 	}
 
     private IEnumerator StateResetDelay (){
@@ -257,11 +256,11 @@ public class ExploreController : MonoBehaviour {
 
 	#region Spindle Animation Methods
 
-	private void CameraSpindleLock(){
-        InputTracking.disablePositionalTracking = true;
-        cameraController.GetComponent<NegateTracking>().spindleScene = true;
-        cameraController.GetComponent<NegateTracking>().enabled = true;
-	}
+	//private void CameraSpindleLock(){
+ //       InputTracking.disablePositionalTracking = true;
+ //       cameraController.GetComponent<NegateTracking>().spindleScene = true;
+ //       cameraController.GetComponent<NegateTracking>().enabled = true;
+	//}
 
 	private IEnumerator SpindleAnimationDelay(){
 		yield return new WaitForSeconds (2.25f);
@@ -293,15 +292,15 @@ public class ExploreController : MonoBehaviour {
 		newTablePart.SetActive (false);
 		housingSide.SetActive (true);
 		housingSideFade.SetActive (false);
-        InputTracking.disablePositionalTracking = false;
         spindleTool.GetComponent<Animator> ().enabled = false;
 		stateLock = false;
 		spindleExtensionTriggers.audioHasPlayed = false;
 		GvrReticleOn ();
 		myState = States.wait;
 		captionsCanvas.FadeCaptionsPanelToggle (arrayInt + 3);
-        cameraController.GetComponent<NegateTracking>().spindleScene = false;
-        cameraController.GetComponent<NegateTracking>().enabled = false;
+        //InputTracking.disablePositionalTracking = false;
+        //cameraController.GetComponent<NegateTracking>().spindleScene = false;
+        //cameraController.GetComponent<NegateTracking>().enabled = false;
     }
 
 	private IEnumerator HousingFadeTo (float aValue, float aTime){
