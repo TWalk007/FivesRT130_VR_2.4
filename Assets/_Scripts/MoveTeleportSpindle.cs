@@ -3,22 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MoveTeleportSpindleTouch : MonoBehaviour {
+public class MoveTeleportSpindle : MonoBehaviour {
 
-	public ExploreControllerTouch exploreControllerTouch;
+	public ExploreController exploreController;
 	public TeleportTransition teleportTransition;
 
 	public GameObject teleportTransitionCanvas;
 	public GameObject teleportFadePanel;
-	public GameObject touchCameraController;
+	public GameObject gvrController;
+
+	public float gazeActivationTime = 1.25f;
 
 	private Transform teleportTargetPos;
 	private Vector3 heightAdjustedPos;
-
+	private float timeElapsed;
 	private bool teleportToSpot = false;
-    
+
+
+
 	void Start () {
 		heightAdjustedPos = new Vector3 (transform.position.x, transform.position.y + 2.25f, transform.position.z);
+	}
+
+	void Update () {
+
+		if (teleportToSpot){
+			timeElapsed += Time.deltaTime;
+
+			if (timeElapsed >= gazeActivationTime) {
+				timeElapsed = 0;
+				Teleport ();
+				teleportToSpot = false;
+
+			}
+		} else {
+			timeElapsed = 0;
+		}
 	}
 
 	private void TeleportTransition (){
@@ -26,26 +46,20 @@ public class MoveTeleportSpindleTouch : MonoBehaviour {
 		teleportFadePanel.GetComponent<TeleportTransition> ().TeleportingTrue ();
 	}
 
-	private void Teleport () {
-        touchCameraController.transform.position = heightAdjustedPos;
-		TeleportTransition ();
-		exploreControllerTouch.myState = ExploreControllerTouch.States.spindleMovement;
-		teleportFadePanel.GetComponent<TeleportTransition> ().TeleportingFalse ();
+	public void OnPointerEnter (){
+		teleportToSpot = true;
 	}
 
-    void OnMouseEnter()
-    {
-        GetComponent<SpriteRenderer>().color = new Color(0.75f, 0.75f, 0.75f);
-    }
+	public void OnPointerExit (){
+		teleportToSpot = false;
+		timeElapsed = 0;
+	}
 
-    void OnMouseExit()
-    {
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
-
-    private void OnMouseDown()
-    {
-        Teleport();
-    }
+	private void Teleport () {		
+		gvrController.transform.position = heightAdjustedPos;
+		TeleportTransition ();
+		exploreController.myState = ExploreController.States.spindleMovement;
+		teleportFadePanel.GetComponent<TeleportTransition> ().TeleportingFalse ();
+	}
 
 }
